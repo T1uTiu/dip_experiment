@@ -84,20 +84,6 @@ void CCzt268View::OnDraw(CDC* pDC)
 			);
 		}
 		
-		if(pDoc->isMirror){
-			StretchDIBits(
-				pDC->GetSafeHdc(),
-				pDoc->bmpInfo->bmiHeader.biWidth,0,
-				pDoc->bmpInfo->bmiHeader.biWidth, pDoc->bmpInfo->bmiHeader.biHeight,
-				0,0,
-				pDoc->bmpInfo->bmiHeader.biWidth, pDoc->bmpInfo->bmiHeader.biHeight,
-				pDoc->mirrorImgData,
-				pDoc->bmpInfo,
-				DIB_RGB_COLORS,
-				SRCCOPY
-			);
-		}
-		
 	}
 }
 

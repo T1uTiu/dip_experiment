@@ -89,28 +89,26 @@ bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j,int& r, int& g,
 		}
 		case 24:{
 			byte* pixel = imgData + lineByte*(imgHeight-j-1)+3*i;
-			r = *pixel;
+			b = *pixel;
 			g = *(pixel+1);
-			b = *(pixel+2);
+			r = *(pixel+2);
 		}
 	}
 	return true;
 }
-bool Mirror(BITMAPINFO* bmpInfo, byte* imgData, int direction, byte* &newImgData){
+bool Mirror(BITMAPINFO* bmpInfo, byte* &imgData, int direction){
 	if(bmpInfo==NULL || imgData==NULL) return false;
 	int imgWidth = bmpInfo->bmiHeader.biWidth, imgHeight = bmpInfo->bmiHeader.biHeight;
 	int bitCount = bmpInfo->bmiHeader.biBitCount;
 	if(bitCount != 8) return false;
 	int lineByte = (imgWidth * bitCount + 31)/32 * 4;
 	
-	newImgData = (byte*)malloc(lineByte*imgHeight);
-	memcpy(newImgData, imgData, lineByte*imgHeight);
 	if(direction==0){
 		for(int i = 0; i < imgHeight; i++){
 			int l = 0, r = imgWidth-1;
 			while(l<r){
-				byte* pixel1 = newImgData + lineByte* i + l;
-				byte* pixel2 = newImgData + lineByte * i+ r;
+				byte* pixel1 = imgData + lineByte* i + l;
+				byte* pixel2 = imgData + lineByte * i+ r;
 				byte tmp = *pixel1;
 				*pixel1 = *pixel2;
 				*pixel2 = tmp;
@@ -122,8 +120,8 @@ bool Mirror(BITMAPINFO* bmpInfo, byte* imgData, int direction, byte* &newImgData
 		for(int i = 0; i < imgWidth; i++){
 			int l = 0, r = imgHeight-1;
 			while(l<r){
-				byte* pixel1 = newImgData + lineByte* l + i;
-				byte* pixel2 = newImgData + lineByte * r+ i;
+				byte* pixel1 = imgData + lineByte* l + i;
+				byte* pixel2 = imgData + lineByte * r+ i;
 				byte tmp = *pixel1;
 				*pixel1 = *pixel2;
 				*pixel2 = tmp;

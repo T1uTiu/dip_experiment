@@ -24,11 +24,9 @@ public:
 	BITMAPINFO* grayBmpInfo;
 	byte* grayImgData;
 
-	byte* mirrorImgData;
-
 	bool isLoad;
 	bool isTrueColor2Gray;
-	bool isMirror;
+
 
 // Operations
 public:

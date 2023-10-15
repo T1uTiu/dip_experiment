@@ -33,7 +33,6 @@ CCzt268Doc::CCzt268Doc()
 	// TODO: add one-time construction code here
 	isLoad = false;
 	isTrueColor2Gray = false;
-	isMirror = false;
 
 	bmpInfo=NULL;
 	imgData=NULL;
@@ -41,7 +40,6 @@ CCzt268Doc::CCzt268Doc()
 	grayBmpInfo=NULL;
 	grayImgData=NULL;
 
-	mirrorImgData = NULL;
 
 }
 
@@ -105,19 +103,6 @@ BOOL CCzt268Doc::OnOpenDocument(LPCTSTR lpszPathName)
 	
 	// TODO: Add your specialized creation code here
 	isLoad = LoadBmpFile((char*)lpszPathName,bmpInfo,imgData);
-	/*
-	if(isLoad && bmpInfo->bmiHeader.biBitCount==24){
-		isTrueColor2Gray = TrueColor2Gray(bmpInfo,imgData,grayBmpInfo,grayImgData);
-	}else{
-		isTrueColor2Gray = false;
-	}
-	*/
-	/*
-	if(isLoad && bmpInfo->bmiHeader.biBitCount==8){
-		isMirror = Mirror(bmpInfo, imgData, 1, mirrorImgData);
-	}else{
-		isMirror = false;
-	}
-	*/
+	isTrueColor2Gray = false;
 	return TRUE;
 }

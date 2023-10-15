@@ -6,14 +6,13 @@
 --------------------Configuration: czt268 - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Users\suish\AppData\Local\Temp\RSP98.tmp" with contents
+Creating temporary file "C:\Users\suish\AppData\Local\Temp\RSP4983.tmp" with contents
 [
 /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Fp"Debug/czt268.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"E:\PROJECT\DIGITALIMAGEPROCESS\czt268\bmp.cpp"
-"E:\PROJECT\DIGITALIMAGEPROCESS\czt268\czt268View.cpp"
+"E:\PROJECT\DIGITALIMAGEPROCESS\czt268\czt268Doc.cpp"
 ]
-Creating command line "cl.exe @C:\Users\suish\AppData\Local\Temp\RSP98.tmp" 
-Creating temporary file "C:\Users\suish\AppData\Local\Temp\RSP99.tmp" with contents
+Creating command line "cl.exe @C:\Users\suish\AppData\Local\Temp\RSP4983.tmp" 
+Creating temporary file "C:\Users\suish\AppData\Local\Temp\RSP4984.tmp" with contents
 [
 /nologo /subsystem:windows /incremental:yes /pdb:"Debug/czt268.pdb" /debug /machine:I386 /out:"Debug/czt268.exe" /pdbtype:sept 
 .\Debug\bmp.obj
@@ -24,12 +23,10 @@ Creating temporary file "C:\Users\suish\AppData\Local\Temp\RSP99.tmp" with conte
 .\Debug\StdAfx.obj
 .\Debug\czt268.res
 ]
-Creating command line "link.exe @C:\Users\suish\AppData\Local\Temp\RSP99.tmp"
+Creating command line "link.exe @C:\Users\suish\AppData\Local\Temp\RSP4984.tmp"
 <h3>Output Window</h3>
 Compiling...
-bmp.cpp
-czt268View.cpp
-Generating Code...
+czt268Doc.cpp
 Linking...
 
 
