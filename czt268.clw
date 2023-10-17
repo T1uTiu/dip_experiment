@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CCzt268Doc
+LastClass=CCzt268View
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "czt268.h"
@@ -43,7 +43,7 @@ ImplementationFile=czt268View.cpp
 Filter=C
 BaseClass=CScrollView
 VirtualFilter=VWC
-LastObject=ID_GRAY
+LastObject=CCzt268View
 
 
 [CLS:CMainFrame]

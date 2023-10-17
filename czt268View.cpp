@@ -22,6 +22,7 @@ BEGIN_MESSAGE_MAP(CCzt268View, CScrollView)
 	//{{AFX_MSG_MAP(CCzt268View)
 	ON_COMMAND(ID_GRAY, OnGray)
 	ON_UPDATE_COMMAND_UI(ID_GRAY, OnUpdateGray)
+	ON_WM_MOUSEMOVE()
 	//}}AFX_MSG_MAP
 	// Standard printing commands
 	ON_COMMAND(ID_FILE_PRINT, CScrollView::OnFilePrint)
@@ -159,4 +160,24 @@ void CCzt268View::OnUpdateGray(CCmdUI* pCmdUI)
 {
 	// TODO: Add your command update UI handler code here
 	
+}
+bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j,char* &val);
+void CCzt268View::OnMouseMove(UINT nFlags, CPoint point) 
+{
+	// TODO: Add your message handler code here and/or call default
+	CCzt268Doc* pDoc = GetDocument();
+	char xy[100];
+	memset(xy, 0, 100);
+	sprintf(xy, "x:%d, y:%d ", point.x, point.y);
+	char* rgb = (char*)malloc(sizeof(char)*100);
+	
+	if(GetRGBValue(pDoc->bmpInfo, pDoc->imgData ,point.y, point.x, rgb)){
+		// sprintf(xy, "(x:%d, y:%d) RGB(%d,%d,%d)", point.x, point.y, r, g, b);
+		strcat(xy, rgb);
+	}
+	
+	((CFrameWnd*)GetParent())->SetMessageText(xy);
+	
+	CScrollView::OnMouseMove(nFlags, point);
+
 }
