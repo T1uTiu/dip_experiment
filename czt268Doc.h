@@ -21,6 +21,9 @@ public:
 	BITMAPINFO* bmpInfo;
 	byte* imgData;
 
+	BITMAPINFO* originBmpInfo;
+	byte* originImgData;
+
 	BITMAPINFO* grayBmpInfo;
 	byte* grayImgData;
 

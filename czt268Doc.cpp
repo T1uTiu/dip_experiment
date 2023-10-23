@@ -37,6 +37,9 @@ CCzt268Doc::CCzt268Doc()
 	bmpInfo=NULL;
 	imgData=NULL;
 
+	originBmpInfo=NULL;
+	originImgData=NULL;
+
 	grayBmpInfo=NULL;
 	grayImgData=NULL;
 
@@ -94,15 +97,15 @@ void CCzt268Doc::Dump(CDumpContext& dc) const
 // CCzt268Doc commands
 
 bool LoadBmpFile(char* path, BITMAPINFO*& bmpInfo, byte*& imgData);
-bool TrueColor2Gray(BITMAPINFO* orilpbmi, byte* orilpBits,BITMAPINFO* &graylpbmi, byte* &graylpBits);
-bool Mirror(BITMAPINFO* bmpInfo, byte* imgData, int direction, byte* &newImgData);
+
 BOOL CCzt268Doc::OnOpenDocument(LPCTSTR lpszPathName) 
 {
 	if (!CDocument::OnOpenDocument(lpszPathName))
 		return FALSE;
 	
 	// TODO: Add your specialized creation code here
-	isLoad = LoadBmpFile((char*)lpszPathName,bmpInfo,imgData);
+	isLoad = LoadBmpFile((char*)lpszPathName,originBmpInfo,originImgData);
+	bmpInfo = originBmpInfo; imgData = originImgData;
 	isTrueColor2Gray = false;
 	return TRUE;
 }

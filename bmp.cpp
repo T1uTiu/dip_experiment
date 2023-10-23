@@ -31,35 +31,7 @@ bool LoadBmpFile(char* path, BITMAPINFO*& lpbmi, byte*& lpBits){
     fclose(file);
 	return true;
 }
-
-bool TrueColor2Gray(BITMAPINFO* orilpbmi, byte* orilpBits,BITMAPINFO* &graylpbmi, byte* &graylpBits){
-	int paletteSize = 256;
-	graylpbmi = (BITMAPINFO*)malloc(sizeof(BITMAPINFOHEADER)+paletteSize*sizeof(RGBQUAD));
-	if(!graylpbmi) return false;
-	memcpy(&(graylpbmi->bmiHeader), &(orilpbmi->bmiHeader),sizeof(BITMAPINFOHEADER));
-	graylpbmi->bmiHeader.biBitCount = 8;
-	graylpbmi->bmiHeader.biClrUsed = 256;
-
-	int imgWidth = orilpbmi->bmiHeader.biWidth;
-	int imgHeight = orilpbmi->bmiHeader.biWidth;
-	int oriLineByte = (imgWidth * 24 + 31)/32 * 4;
-	int grayLineByte = (imgWidth * 8 + 31)/32 * 4;
-	graylpBits = (byte*)malloc(grayLineByte*imgHeight);
-	if(!graylpBits) return false;
-	for(int i = 0; i < imgHeight; i++){
-		for(int j = 0; j < imgWidth; j++){
-			int b = orilpBits[oriLineByte*i+j*3];
-			int g = orilpBits[oriLineByte*i+j*3+1];
-			int r = orilpBits[oriLineByte*i+j*3+2];
-			int gray = (r+g+b)/3;
-			
-			graylpBits[i*grayLineByte+j] = gray;
-			graylpbmi->bmiColors[gray].rgbRed=graylpbmi->bmiColors[gray].rgbBlue=graylpbmi->bmiColors[gray].rgbGreen=gray;
-		}
-	}
-	return true;
-}
-bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j,char* &val){
+bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j, int&r, int&g, int&b){
 	if(bmpInfo==NULL || imgData==NULL) return false;
 
 	int imgWidth = bmpInfo->bmiHeader.biWidth, imgHeight = bmpInfo->bmiHeader.biHeight;
@@ -68,17 +40,11 @@ bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j,char* &val){
 	int bitCount = bmpInfo->bmiHeader.biBitCount;
 	RGBQUAD* palette = bmpInfo->bmiColors;
     int lineByte = (imgWidth * bitCount + 31)/32 * 4;
-	byte r, g, b;
 	switch(bitCount){
 		case 1:{
 			byte* pixel = imgData + lineByte*(imgHeight-i-1)+j/8;
 			int idx = (*pixel) >> (7-(j%8)) &1;
 			r = g = b = idx ? 255 : 0;
-			if(idx){
-				sprintf(val, "前景点");
-			}else{
-				sprintf(val, "背景点");
-			}
 			break;
 		}
 		case 4:{
@@ -87,7 +53,6 @@ bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j,char* &val){
 			r = palette[idx].rgbRed;
 			g = palette[idx].rgbGreen;
 			b = palette[idx].rgbBlue;
-			sprintf(val, "RGB(%d,%d,%d)", r,g,b);
 			break;
 		}
 		case 8:{
@@ -95,12 +60,6 @@ bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j,char* &val){
 			r = palette[*pixel].rgbRed;
 			g = palette[*pixel].rgbGreen;
 			b = palette[*pixel].rgbBlue; 
-			if(r == g && g == b){
-				sprintf(val, "亮度值:%d", r);
-			}else{
-				sprintf(val, "RGB(%d,%d,%d)", r,g,b);
-			}
-			
 			break;
 		}
 		case 24:{
@@ -108,8 +67,55 @@ bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j,char* &val){
 			b = *pixel;
 			g = *(pixel+1);
 			r = *(pixel+2);
+			break;
+		}
+	}
+	return true;
+}
+bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j,char* &val){
+	int r,g,b;
+	if(!GetRGBValue(bmpInfo, imgData, i,j, r,g,b)) return false;
+	switch(bmpInfo->bmiHeader.biBitCount){
+		case 1:
+			if(r == 255) sprintf(val, "前景点");
+			else sprintf(val, "背景点");
+			break;
+		case 8:
+			if(r == g && g == b) sprintf(val, "亮度值:%d", r);
+			else sprintf(val, "RGB(%d,%d,%d)", r,g,b);
+			break;
+		default:
 			sprintf(val, "RGB(%d,%d,%d)", r,g,b);
 			break;
+	}
+	return true;
+		
+}
+bool Gray(BITMAPINFO* originBmpInfo, byte* originImgData, BITMAPINFO* &grayBmpInfo, byte* &grayImgData){
+	if(originBmpInfo == NULL || originImgData==NULL) return false;
+
+	grayBmpInfo = (BITMAPINFO*)malloc(sizeof(BITMAPINFOHEADER)+256*sizeof(RGBQUAD));
+	if(!grayBmpInfo) return false;
+	memcpy(&(grayBmpInfo->bmiHeader), &(originBmpInfo->bmiHeader),sizeof(BITMAPINFOHEADER));
+	grayBmpInfo->bmiHeader.biBitCount = 8;
+	grayBmpInfo->bmiHeader.biClrUsed = 256;
+
+	int imgWidth = originBmpInfo->bmiHeader.biWidth;
+	int imgHeight = originBmpInfo->bmiHeader.biHeight;
+	int oriLineByte = (imgWidth * originBmpInfo->bmiHeader.biBitCount + 31)/32 * 4;
+	int grayLineByte = (imgWidth * 8 + 31)/32 * 4;
+
+	grayImgData = (byte*)malloc(grayLineByte*imgHeight);
+	if(!grayImgData) return false;
+
+	for(int i = 0; i < imgHeight; i++){
+		for(int j = 0; j < imgWidth; j++){
+			int r,g,b;
+			GetRGBValue(originBmpInfo, originImgData, i, j, r, g ,b);
+			int gray = (r+g+b)/3;
+			
+			grayImgData[(imgHeight-i-1)*grayLineByte+j] = gray;
+			grayBmpInfo->bmiColors[gray].rgbRed=grayBmpInfo->bmiColors[gray].rgbBlue=grayBmpInfo->bmiColors[gray].rgbGreen=gray;
 		}
 	}
 	return true;

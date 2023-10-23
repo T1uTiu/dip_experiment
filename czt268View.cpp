@@ -71,6 +71,7 @@ void CCzt268View::OnDraw(CDC* pDC)
 			DIB_RGB_COLORS,
 			SRCCOPY
 		);
+		/*
 		if(pDoc->isTrueColor2Gray){
 			StretchDIBits(
 				pDC->GetSafeHdc(),
@@ -84,6 +85,7 @@ void CCzt268View::OnDraw(CDC* pDC)
 				SRCCOPY
 			);
 		}
+		*/
 		
 	}
 }
@@ -141,17 +143,19 @@ CCzt268Doc* CCzt268View::GetDocument() // non-debug version is inline
 /////////////////////////////////////////////////////////////////////////////
 // CCzt268View message handlers
 
-bool TrueColor2Gray(BITMAPINFO* orilpbmi, byte* orilpBits,BITMAPINFO* &graylpbmi, byte* &graylpBits);
+bool Gray(BITMAPINFO* orilpbmi, byte* orilpBits,BITMAPINFO* &graylpbmi, byte* &graylpBits);
 void CCzt268View::OnGray() 
 {
 	// TODO: Add your command handler code here
 	CCzt268Doc* pDoc = GetDocument();
-	if(pDoc->isLoad && pDoc->bmpInfo->bmiHeader.biBitCount==24){
-		pDoc->isTrueColor2Gray = TrueColor2Gray(pDoc->bmpInfo, pDoc->imgData, pDoc->grayBmpInfo, pDoc->grayImgData);
-	}else{
-		pDoc->isTrueColor2Gray = false;
-	
+	if(pDoc->isLoad){
+		pDoc->isTrueColor2Gray = Gray(pDoc->originBmpInfo, pDoc->originImgData, pDoc->grayBmpInfo, pDoc->grayImgData);
 	}
+	if(pDoc->isTrueColor2Gray){
+		pDoc->bmpInfo = pDoc->grayBmpInfo;
+		pDoc->imgData = pDoc->grayImgData;
+	}
+	
 	Invalidate();
 	
 }

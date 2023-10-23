@@ -6,13 +6,13 @@
 --------------------Configuration: czt268 - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Users\suish\AppData\Local\Temp\RSP8A15.tmp" with contents
+Creating temporary file "C:\Users\suish\AppData\Local\Temp\RSPBC2B.tmp" with contents
 [
 /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Fp"Debug/czt268.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
 "E:\PROJECT\DIGITALIMAGEPROCESS\czt268\bmp.cpp"
 ]
-Creating command line "cl.exe @C:\Users\suish\AppData\Local\Temp\RSP8A15.tmp" 
-Creating temporary file "C:\Users\suish\AppData\Local\Temp\RSP8A16.tmp" with contents
+Creating command line "cl.exe @C:\Users\suish\AppData\Local\Temp\RSPBC2B.tmp" 
+Creating temporary file "C:\Users\suish\AppData\Local\Temp\RSPBC2C.tmp" with contents
 [
 /nologo /subsystem:windows /incremental:yes /pdb:"Debug/czt268.pdb" /debug /machine:I386 /out:"Debug/czt268.exe" /pdbtype:sept 
 .\Debug\bmp.obj
@@ -23,7 +23,7 @@ Creating temporary file "C:\Users\suish\AppData\Local\Temp\RSP8A16.tmp" with con
 .\Debug\StdAfx.obj
 .\Debug\czt268.res
 ]
-Creating command line "link.exe @C:\Users\suish\AppData\Local\Temp\RSP8A16.tmp"
+Creating command line "link.exe @C:\Users\suish\AppData\Local\Temp\RSPBC2C.tmp"
 <h3>Output Window</h3>
 Compiling...
 bmp.cpp
