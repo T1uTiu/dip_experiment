@@ -6,6 +6,7 @@
 
 #include "czt268Doc.h"
 #include "czt268View.h"
+#include "HistogramDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -23,6 +24,8 @@ BEGIN_MESSAGE_MAP(CCzt268View, CScrollView)
 	ON_COMMAND(ID_GRAY, OnGray)
 	ON_UPDATE_COMMAND_UI(ID_GRAY, OnUpdateGray)
 	ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_HISTOGRAMDLG, OnHistogramdlg)
+	ON_UPDATE_COMMAND_UI(ID_HISTOGRAMDLG, OnUpdateHistogramdlg)
 	//}}AFX_MSG_MAP
 	// Standard printing commands
 	ON_COMMAND(ID_FILE_PRINT, CScrollView::OnFilePrint)
@@ -54,7 +57,6 @@ BOOL CCzt268View::PreCreateWindow(CREATESTRUCT& cs)
 
 /////////////////////////////////////////////////////////////////////////////
 // CCzt268View drawing
-
 void CCzt268View::OnDraw(CDC* pDC)
 {
 	CCzt268Doc* pDoc = GetDocument();
@@ -71,21 +73,6 @@ void CCzt268View::OnDraw(CDC* pDC)
 			DIB_RGB_COLORS,
 			SRCCOPY
 		);
-		/*
-		if(pDoc->isTrueColor2Gray){
-			StretchDIBits(
-				pDC->GetSafeHdc(),
-				0,0,
-				pDoc->bmpInfo->bmiHeader.biWidth, pDoc->bmpInfo->bmiHeader.biHeight,
-				0,0,
-				pDoc->bmpInfo->bmiHeader.biWidth, pDoc->bmpInfo->bmiHeader.biHeight,
-				pDoc->grayImgData,
-				pDoc->grayBmpInfo,
-				DIB_RGB_COLORS,
-				SRCCOPY
-			);
-		}
-		*/
 		
 	}
 }
@@ -176,7 +163,6 @@ void CCzt268View::OnMouseMove(UINT nFlags, CPoint point)
 	char* rgb = (char*)malloc(sizeof(char)*100);
 	
 	if(GetRGBValue(pDoc->bmpInfo, pDoc->imgData ,point.y, point.x, rgb)){
-		// sprintf(xy, "(x:%d, y:%d) RGB(%d,%d,%d)", point.x, point.y, r, g, b);
 		strcat(xy, rgb);
 	}
 	
@@ -184,4 +170,23 @@ void CCzt268View::OnMouseMove(UINT nFlags, CPoint point)
 	
 	CScrollView::OnMouseMove(nFlags, point);
 
+}
+
+void CCzt268View::OnHistogramdlg() 
+{
+	// TODO: Add your command handler code here
+	CCzt268Doc* pDoc = GetDocument();
+	CHistogramDlg dlg(NULL, pDoc->bmpInfo, pDoc->imgData);
+	dlg.DoModal();
+
+	
+}
+
+void CCzt268View::OnUpdateHistogramdlg(CCmdUI* pCmdUI) 
+{
+	// TODO: Add your command update UI handler code here
+	CCzt268Doc* pDoc = GetDocument();
+	pCmdUI->Enable(pDoc->isLoad);
+
+	
 }

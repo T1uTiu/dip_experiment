@@ -39,7 +39,7 @@ bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j, int&r, int&g, 
 
 	int bitCount = bmpInfo->bmiHeader.biBitCount;
 	RGBQUAD* palette = bmpInfo->bmiColors;
-    int lineByte = (imgWidth * bitCount + 31)/32 * 4;
+	int lineByte = (imgWidth * bitCount + 31)/32 * 4;
 	switch(bitCount){
 		case 1:{
 			byte* pixel = imgData + lineByte*(imgHeight-i-1)+j/8;
@@ -120,6 +120,29 @@ bool Gray(BITMAPINFO* originBmpInfo, byte* originImgData, BITMAPINFO* &grayBmpIn
 	}
 	return true;
 }
+bool GetGrayHistogram(BITMAPINFO* bmpInfo, byte* &imgData,int* &redGrayHistogram,int* &greenGrayHistogram,int* &blueGrayHistogram){
+	if(bmpInfo==NULL || imgData==NULL) return false;
+
+	int imgWidth = bmpInfo->bmiHeader.biWidth, imgHeight = bmpInfo->bmiHeader.biHeight;
+
+	redGrayHistogram = (int*)malloc(sizeof(int)*256); memset(redGrayHistogram, 0 , 256*4);
+	greenGrayHistogram = (int*)malloc(sizeof(int)*256); memset(greenGrayHistogram, 0 , 256*4);
+	blueGrayHistogram = (int*)malloc(sizeof(int)*256); memset(blueGrayHistogram, 0 , 256*4);
+
+	for(int i = 0; i < imgHeight; i++){
+		for(int j = 0; j < imgWidth; j++){
+			int r,g,b;
+			GetRGBValue(bmpInfo, imgData, i, j, r, g ,b);
+			redGrayHistogram[r]++;
+			greenGrayHistogram[g]++;
+			blueGrayHistogram[b]++;
+
+		}
+	}
+	return true;
+}
+
+
 bool Mirror(BITMAPINFO* bmpInfo, byte* &imgData, int direction){
 	if(bmpInfo==NULL || imgData==NULL) return false;
 	int imgWidth = bmpInfo->bmiHeader.biWidth, imgHeight = bmpInfo->bmiHeader.biHeight;

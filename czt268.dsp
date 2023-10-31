@@ -111,6 +111,10 @@ SOURCE=.\czt268View.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\HistogramDlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\MainFrm.cpp
 # End Source File
 # Begin Source File
@@ -133,6 +137,10 @@ SOURCE=.\czt268Doc.h
 # Begin Source File
 
 SOURCE=.\czt268View.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\HistogramDlg.h
 # End Source File
 # Begin Source File
 

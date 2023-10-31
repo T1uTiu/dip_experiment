@@ -30,6 +30,10 @@ public:
 	bool isLoad;
 	bool isTrueColor2Gray;
 
+	int* redGrayHistogram;
+	int* greenGrayHistogram;
+	int* blueGrayHistogram;
+
 
 // Operations
 public:
