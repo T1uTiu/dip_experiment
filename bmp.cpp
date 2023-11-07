@@ -31,6 +31,50 @@ bool LoadBmpFile(char* path, BITMAPINFO*& lpbmi, byte*& lpBits){
     fclose(file);
 	return true;
 }
+bool SetRGBValue(BITMAPINFO* &bmpInfo, byte* &imgData, int i, int j, int r, int g, int b){
+	if(bmpInfo==NULL || imgData==NULL) return false;
+
+	int imgWidth = bmpInfo->bmiHeader.biWidth, imgHeight = bmpInfo->bmiHeader.biHeight;
+	if(i<0 || i>=imgHeight || j<0 || j>=imgWidth) return false;
+
+	int bitCount = bmpInfo->bmiHeader.biBitCount;
+	RGBQUAD* palette = bmpInfo->bmiColors;
+	int lineByte = (imgWidth * bitCount + 31)/32 * 4;
+	switch(bitCount){
+		case 1:{
+			byte* pixel = imgData + lineByte*(imgHeight-i-1)+j/8;
+			int idx = (*pixel) >> (7-(j%8)) &1;
+			palette[idx].rgbRed = r;
+			palette[idx].rgbGreen = g;
+			palette[idx].rgbBlue = b;
+			break;
+		}
+		case 4:{
+			byte* pixel = imgData + lineByte*(imgHeight-i-1)+j/2;
+			int idx = j%2 == 0 ? (*pixel) >> 4 : (*pixel) & 15;
+			palette[idx].rgbRed = r;
+			palette[idx].rgbGreen = g;
+			palette[idx].rgbBlue = b;
+			break;
+		}
+		case 8:{
+			byte* pixel = imgData + lineByte*(imgHeight-i-1)+j;
+			palette[*pixel].rgbRed = r;
+			palette[*pixel].rgbGreen = g;
+			palette[*pixel].rgbBlue= b; 
+			break;
+		}
+		case 24:{
+			byte* pixel = imgData + lineByte*(imgHeight-i-1)+3*j;
+			*pixel = b;
+			*(pixel+1)= g;
+			*(pixel+2) = r;
+			break;
+		}
+	}
+	return true;
+
+}
 bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j, int&r, int&g, int&b){
 	if(bmpInfo==NULL || imgData==NULL) return false;
 
@@ -120,28 +164,92 @@ bool Gray(BITMAPINFO* originBmpInfo, byte* originImgData, BITMAPINFO* &grayBmpIn
 	}
 	return true;
 }
-bool GetGrayHistogram(BITMAPINFO* bmpInfo, byte* &imgData,int* &redGrayHistogram,int* &greenGrayHistogram,int* &blueGrayHistogram){
+bool GetGrayHistogram(BITMAPINFO* bmpInfo, byte* imgData,int* &grayHistogram){
 	if(bmpInfo==NULL || imgData==NULL) return false;
 
 	int imgWidth = bmpInfo->bmiHeader.biWidth, imgHeight = bmpInfo->bmiHeader.biHeight;
 
-	redGrayHistogram = (int*)malloc(sizeof(int)*256); memset(redGrayHistogram, 0 , 256*4);
-	greenGrayHistogram = (int*)malloc(sizeof(int)*256); memset(greenGrayHistogram, 0 , 256*4);
-	blueGrayHistogram = (int*)malloc(sizeof(int)*256); memset(blueGrayHistogram, 0 , 256*4);
+	grayHistogram = (int*)malloc(sizeof(int)*256*3); memset(grayHistogram, 0 , 256*sizeof(int)*3);
 
 	for(int i = 0; i < imgHeight; i++){
 		for(int j = 0; j < imgWidth; j++){
 			int r,g,b;
-			GetRGBValue(bmpInfo, imgData, i, j, r, g ,b);
-			redGrayHistogram[r]++;
-			greenGrayHistogram[g]++;
-			blueGrayHistogram[b]++;
+			if(! GetRGBValue(bmpInfo, imgData, i, j, r, g ,b) ) return false;
+			grayHistogram[0+r]++;
+			grayHistogram[256+g]++;
+			grayHistogram[512+b]++;
 
 		}
 	}
 	return true;
 }
 
+bool EqualHistogram(BITMAPINFO* &bmpInfo, byte* &imgData, int* grayHistogram){
+	if(bmpInfo==NULL || imgData==NULL || grayHistogram==NULL) return false;
+	int imgWidth = bmpInfo->bmiHeader.biWidth, imgHeight = bmpInfo->bmiHeader.biHeight;
+	int imgArea = imgWidth * imgHeight;
+	
+	int i, j;
+	// 灰度直方图前缀和
+	for(i = 1; i < 256; i++){
+		grayHistogram[0+i] += grayHistogram[0+i-1];
+		grayHistogram[256+i] += grayHistogram[256+i-1];
+		grayHistogram[512+i] += grayHistogram[512+i-1];
+	}
+
+	int palleteSize = bmpInfo->bmiHeader.biClrUsed, bitCount = bmpInfo->bmiHeader.biBitCount;
+	RGBQUAD* pallete = bmpInfo->bmiColors;
+	
+	if(bitCount == 24){
+		for(i = 0; i < imgHeight; i++){
+			for(j = 0; j < imgWidth; j++){
+				int r,g,b;
+				if(! GetRGBValue(bmpInfo, imgData, i, j, r, g ,b) ) return false;
+				int equalR = 255*grayHistogram[0+r]/imgArea, equalG=255*grayHistogram[256+g]/imgArea, equalB=255*grayHistogram[512+b]/imgArea;
+				SetRGBValue(bmpInfo, imgData, i, j, equalR, equalG, equalB);
+			}
+		}
+	}else{
+		for(i = 0; i < palleteSize; i++){
+			int r = pallete[i].rgbRed, g = pallete[i].rgbGreen, b = pallete[i].rgbBlue;
+			int equalR = 255*grayHistogram[0+r]/imgArea, equalG=255*grayHistogram[256+g]/imgArea, equalB=255*grayHistogram[512+b]/imgArea;
+			pallete[i].rgbRed = equalR;
+			pallete[i].rgbGreen = equalG;
+			pallete[i].rgbBlue = equalB;
+		}
+	}
+	
+	
+	return true;
+}
+bool LinearPointCalculate(BITMAPINFO* &bmpInfo, byte* &imgData, int a1, int a0){
+	if(bmpInfo==NULL || imgData==NULL) return false;
+	int imgWidth = bmpInfo->bmiHeader.biWidth, imgHeight = bmpInfo->bmiHeader.biHeight;
+
+	int palleteSize = bmpInfo->bmiHeader.biClrUsed, bitCount = bmpInfo->bmiHeader.biBitCount;
+	RGBQUAD* pallete = bmpInfo->bmiColors;
+	
+	int i,j;
+	if(bitCount == 24){
+		for(i = 0; i < imgHeight; i++){
+			for(j = 0; j < imgWidth; j++){
+				int r,g,b;
+				if(! GetRGBValue(bmpInfo, imgData, i, j, r, g ,b) ) return false;
+				int newR = min(255, max(0, a1*r+a0)), newG= min(255, max(0, a1*g+a0)) , newB=min(255, max(0, a1*b+a0));
+				SetRGBValue(bmpInfo, imgData, i, j, newR, newG, newB);
+			}
+		}
+	}else{
+		for(i = 0; i < palleteSize; i++){
+			int r = pallete[i].rgbRed, g = pallete[i].rgbGreen, b = pallete[i].rgbBlue;
+			int newR = min(255, max(0, a1*r+a0)), newG= min(255, max(0, a1*g+a0)) , newB=min(255, max(0, a1*b+a0));
+			pallete[i].rgbRed = newR;
+			pallete[i].rgbGreen = newG;
+			pallete[i].rgbBlue = newB;
+		}
+	}
+	return true;
+}
 
 bool Mirror(BITMAPINFO* bmpInfo, byte* &imgData, int direction){
 	if(bmpInfo==NULL || imgData==NULL) return false;

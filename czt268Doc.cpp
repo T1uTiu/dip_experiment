@@ -32,17 +32,10 @@ CCzt268Doc::CCzt268Doc()
 {
 	// TODO: add one-time construction code here
 	isLoad = false;
-	isTrueColor2Gray = false;
 
-	bmpInfo=NULL;
-	imgData=NULL;
+	bmpInfo=NULL, imgData=NULL;
 
-	originBmpInfo=NULL;
-	originImgData=NULL;
-
-	grayBmpInfo=NULL;
-	grayImgData=NULL;
-
+	originBmpInfo=NULL, originImgData=NULL;
 
 }
 
@@ -106,6 +99,5 @@ BOOL CCzt268Doc::OnOpenDocument(LPCTSTR lpszPathName)
 	// TODO: Add your specialized creation code here
 	isLoad = LoadBmpFile((char*)lpszPathName,originBmpInfo,originImgData);
 	bmpInfo = originBmpInfo; imgData = originImgData;
-	isTrueColor2Gray = false;
 	return TRUE;
 }

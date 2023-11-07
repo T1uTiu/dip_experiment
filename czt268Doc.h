@@ -24,16 +24,7 @@ public:
 	BITMAPINFO* originBmpInfo;
 	byte* originImgData;
 
-	BITMAPINFO* grayBmpInfo;
-	byte* grayImgData;
-
 	bool isLoad;
-	bool isTrueColor2Gray;
-
-	int* redGrayHistogram;
-	int* greenGrayHistogram;
-	int* blueGrayHistogram;
-
 
 // Operations
 public:

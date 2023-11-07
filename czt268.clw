@@ -2,19 +2,19 @@
 
 [General Info]
 Version=1
-LastClass=CHistogramDlg
+LastClass=LinearTrans
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "czt268.h"
 LastPage=0
 
-ClassCount=6
+ClassCount=7
 Class1=CCzt268App
 Class2=CCzt268Doc
 Class3=CCzt268View
 Class4=CMainFrame
 
-ResourceCount=5
+ResourceCount=6
 Resource1=IDD_ABOUTBOX
 Resource2=IDR_MAINFRAME
 Class5=CAboutDlg
@@ -22,6 +22,8 @@ Resource3=IDD_ABOUTBOX (English (U.S.))
 Resource4=IDR_MAINFRAME (English (U.S.))
 Class6=CHistogramDlg
 Resource5=IDD_DIALOG1
+Class7=LinearTrans
+Resource6=IDD_DIALOG2
 
 [CLS:CCzt268App]
 Type=0
@@ -45,7 +47,7 @@ ImplementationFile=czt268View.cpp
 Filter=C
 BaseClass=CScrollView
 VirtualFilter=VWC
-LastObject=ID_HISTOGRAMDLG
+LastObject=CCzt268View
 
 
 [CLS:CMainFrame]
@@ -127,7 +129,9 @@ Command7=ID_FILE_PRINT
 Command8=ID_APP_ABOUT
 Command9=ID_GRAY
 Command10=ID_HISTOGRAMDLG
-CommandCount=10
+Command11=ID_EQUAL
+Command12=ID_LINE_TRANS
+CommandCount=12
 
 [MNU:IDR_MAINFRAME (English (U.S.))]
 Type=1
@@ -190,5 +194,25 @@ ImplementationFile=HistogramDlg.cpp
 BaseClass=CDialog
 Filter=D
 LastObject=CHistogramDlg
+VirtualFilter=dWC
+
+[DLG:IDD_DIALOG2]
+Type=1
+Class=LinearTrans
+ControlCount=6
+Control1=IDOK,button,1342242817
+Control2=IDCANCEL,button,1342242816
+Control3=IDC_EDIT1,edit,1350631552
+Control4=IDC_EDIT2,edit,1350631552
+Control5=IDC_STATIC,static,1342308352
+Control6=IDC_STATIC,static,1342308352
+
+[CLS:LinearTrans]
+Type=0
+HeaderFile=LinearTrans.h
+ImplementationFile=LinearTrans.cpp
+BaseClass=CDialog
+Filter=D
+LastObject=ID_APP_ABOUT
 VirtualFilter=dWC
 

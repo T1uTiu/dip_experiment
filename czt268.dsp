@@ -115,6 +115,10 @@ SOURCE=.\HistogramDlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\LinearTrans.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\MainFrm.cpp
 # End Source File
 # Begin Source File
@@ -141,6 +145,10 @@ SOURCE=.\czt268View.h
 # Begin Source File
 
 SOURCE=.\HistogramDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LinearTrans.h
 # End Source File
 # Begin Source File
 

@@ -7,6 +7,7 @@
 #include "czt268Doc.h"
 #include "czt268View.h"
 #include "HistogramDlg.h"
+#include "LinearTrans.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -26,6 +27,10 @@ BEGIN_MESSAGE_MAP(CCzt268View, CScrollView)
 	ON_WM_MOUSEMOVE()
 	ON_COMMAND(ID_HISTOGRAMDLG, OnHistogramdlg)
 	ON_UPDATE_COMMAND_UI(ID_HISTOGRAMDLG, OnUpdateHistogramdlg)
+	ON_COMMAND(ID_EQUAL, OnEqual)
+	ON_UPDATE_COMMAND_UI(ID_EQUAL, OnUpdateEqual)
+	ON_COMMAND(ID_LINE_TRANS, OnLineTrans)
+	ON_UPDATE_COMMAND_UI(ID_LINE_TRANS, OnUpdateLineTrans)
 	//}}AFX_MSG_MAP
 	// Standard printing commands
 	ON_COMMAND(ID_FILE_PRINT, CScrollView::OnFilePrint)
@@ -135,12 +140,11 @@ void CCzt268View::OnGray()
 {
 	// TODO: Add your command handler code here
 	CCzt268Doc* pDoc = GetDocument();
-	if(pDoc->isLoad){
-		pDoc->isTrueColor2Gray = Gray(pDoc->originBmpInfo, pDoc->originImgData, pDoc->grayBmpInfo, pDoc->grayImgData);
-	}
-	if(pDoc->isTrueColor2Gray){
-		pDoc->bmpInfo = pDoc->grayBmpInfo;
-		pDoc->imgData = pDoc->grayImgData;
+	BITMAPINFO* grayBmpInfo;
+	byte* grayImgData;
+	if(pDoc->isLoad && Gray(pDoc->bmpInfo, pDoc->imgData, grayBmpInfo, grayImgData)){
+		pDoc->bmpInfo = grayBmpInfo;
+		pDoc->imgData = grayImgData;
 	}
 	
 	Invalidate();
@@ -150,6 +154,8 @@ void CCzt268View::OnGray()
 void CCzt268View::OnUpdateGray(CCmdUI* pCmdUI) 
 {
 	// TODO: Add your command update UI handler code here
+	CCzt268Doc* pDoc = GetDocument();
+	pCmdUI->Enable(pDoc->isLoad);
 	
 }
 bool GetRGBValue(BITMAPINFO* bmpInfo, byte* imgData,int i, int j,char* &val);
@@ -188,5 +194,47 @@ void CCzt268View::OnUpdateHistogramdlg(CCmdUI* pCmdUI)
 	CCzt268Doc* pDoc = GetDocument();
 	pCmdUI->Enable(pDoc->isLoad);
 
+	
+}
+bool GetGrayHistogram(BITMAPINFO* bmpInfo, byte* imgData,int* &grayHistogram);
+bool EqualHistogram(BITMAPINFO* &bmpInfo, byte* &imgData, int* grayHistogram);
+bool LinearPointCalculate(BITMAPINFO* &bmpInfo, byte* &imgData, int a1, int a0);
+void CCzt268View::OnEqual() 
+{
+	// TODO: Add your command handler code here
+	CCzt268Doc* pDoc = GetDocument();
+	
+	int* grayHistogram;
+	if(GetGrayHistogram(pDoc->bmpInfo, pDoc->imgData, grayHistogram)){
+		EqualHistogram(pDoc->bmpInfo, pDoc->imgData, grayHistogram);
+	}
+	Invalidate();
+	
+}
+
+void CCzt268View::OnUpdateEqual(CCmdUI* pCmdUI) 
+{
+	// TODO: Add your command update UI handler code here
+	CCzt268Doc* pDoc = GetDocument();
+	pCmdUI->Enable(pDoc->isLoad);
+	
+}
+
+void CCzt268View::OnLineTrans() 
+{
+	// TODO: Add your command handler code here
+	CCzt268Doc* pDoc = GetDocument();
+	int a0, a1;
+	LinearTrans dlg(&a0, &a1);
+	dlg.DoModal();
+	LinearPointCalculate(pDoc->bmpInfo, pDoc->imgData, a0, a1);
+	Invalidate();
+}
+
+void CCzt268View::OnUpdateLineTrans(CCmdUI* pCmdUI) 
+{
+	// TODO: Add your command update UI handler code here
+	CCzt268Doc* pDoc = GetDocument();
+	pCmdUI->Enable(pDoc->isLoad);
 	
 }
