@@ -32,8 +32,10 @@ CCzt268Doc::CCzt268Doc()
 {
 	// TODO: add one-time construction code here
 	isLoad = false;
+	isFT = false;
+	isIFT = false;
 
-	bmpInfo=NULL, imgData=NULL;
+	bmpInfo=NULL, imgData=NULL, ftData = NULL;
 
 	originBmpInfo=NULL, originImgData=NULL;
 
@@ -99,5 +101,16 @@ BOOL CCzt268Doc::OnOpenDocument(LPCTSTR lpszPathName)
 	// TODO: Add your specialized creation code here
 	isLoad = LoadBmpFile((char*)lpszPathName,originBmpInfo,originImgData);
 	bmpInfo = originBmpInfo; imgData = originImgData;
+	isFT = false;
+	isIFT = false;
 	return TRUE;
+}
+bool CCzt268Doc::isGrayImage(){
+	if(!isLoad) return false;
+	if(bmpInfo->bmiHeader.biBitCount != 8) return false;
+	for(int i = 0; i < 256; i++){
+		RGBQUAD p = bmpInfo->bmiColors[i];
+		if(!(p.rgbBlue == p.rgbGreen && p.rgbBlue == p.rgbRed)) return false;
+	}
+	return true;
 }

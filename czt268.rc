@@ -62,6 +62,13 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP  DISCARDABLE     "res\\bitmap1.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Dialog
 //
 
@@ -164,6 +171,19 @@ BEGIN
     BUTTON      ID_HISTOGRAMDLG
     BUTTON      ID_EQUAL
     BUTTON      ID_LINE_TRANS
+    SEPARATOR
+    BUTTON      ID_FT
+    BUTTON      ID_IFT
+    BUTTON      ID_FFT
+    BUTTON      ID_IFFT
+    SEPARATOR
+    BUTTON      ID_MEANFILTER
+    BUTTON      ID_MIDFILTER
+    BUTTON      ID_LAPLACIAN
+    BUTTON      ID_GRADIENT_SHARPEN
+    SEPARATOR
+    BUTTON      ID_IDEALLOWPASS
+    BUTTON      ID_BUTTERWORTHLOWPASS
 END
 
 
@@ -429,6 +449,26 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     AFX_IDS_PREVIEW_CLOSE   "Close print preview mode\nCancel Preview"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_GRAY                 "color img to gray img"
+    ID_HISTOGRAMDLG         "show histogram"
+    ID_EQUAL                "equalize histogram"
+    ID_LINE_TRANS           "linear point calculate"
+    ID_FT                   "Fourier Trans"
+    ID_IFT                  "傅里叶反变换"
+    ID_MEANFILTER           "均值滤波"
+    ID_LAPLACIAN            "拉普拉斯锐化"
+    ID_MIDFILTER            "中值滤波"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FFT                  "快速傅立叶正变换"
+    ID_IFFT                 "快速傅里叶反变换"
+    ID_GRADIENT_SHARPEN     "梯度锐化"
 END
 
 #endif    // English (U.S.) resources

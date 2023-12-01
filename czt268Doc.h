@@ -20,15 +20,20 @@ protected: // create from serialization only
 public:
 	BITMAPINFO* bmpInfo;
 	byte* imgData;
+	complex<double>* ftData;
+	byte* ftSpectrum;
+	byte* iftImgData;
 
 	BITMAPINFO* originBmpInfo;
 	byte* originImgData;
 
 	bool isLoad;
+	bool isFT;
+	bool isIFT;
 
 // Operations
 public:
-
+	bool isGrayImage();
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CCzt268Doc)

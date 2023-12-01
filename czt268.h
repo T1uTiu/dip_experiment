@@ -14,6 +14,7 @@
 
 #include "resource.h"       // main symbols
 
+
 /////////////////////////////////////////////////////////////////////////////
 // CCzt268App:
 // See czt268.cpp for the implementation of this class

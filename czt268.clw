@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=LinearTrans
+LastClass=CCzt268View
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "czt268.h"
@@ -47,7 +47,7 @@ ImplementationFile=czt268View.cpp
 Filter=C
 BaseClass=CScrollView
 VirtualFilter=VWC
-LastObject=CCzt268View
+LastObject=ID_BUTTERWORTHLOWPASS
 
 
 [CLS:CMainFrame]
@@ -131,7 +131,17 @@ Command9=ID_GRAY
 Command10=ID_HISTOGRAMDLG
 Command11=ID_EQUAL
 Command12=ID_LINE_TRANS
-CommandCount=12
+Command13=ID_FT
+Command14=ID_IFT
+Command15=ID_FFT
+Command16=ID_IFFT
+Command17=ID_MEANFILTER
+Command18=ID_MIDFILTER
+Command19=ID_LAPLACIAN
+Command20=ID_GRADIENT_SHARPEN
+Command21=ID_IDEALLOWPASS
+Command22=ID_BUTTERWORTHLOWPASS
+CommandCount=22
 
 [MNU:IDR_MAINFRAME (English (U.S.))]
 Type=1

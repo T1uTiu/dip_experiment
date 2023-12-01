@@ -61,6 +61,26 @@ protected:
 	afx_msg void OnUpdateEqual(CCmdUI* pCmdUI);
 	afx_msg void OnLineTrans();
 	afx_msg void OnUpdateLineTrans(CCmdUI* pCmdUI);
+	afx_msg void OnFt();
+	afx_msg void OnUpdateFt(CCmdUI* pCmdUI);
+	afx_msg void OnIft();
+	afx_msg void OnUpdateIft(CCmdUI* pCmdUI);
+	afx_msg void OnMeanfilter();
+	afx_msg void OnUpdateMeanfilter(CCmdUI* pCmdUI);
+	afx_msg void OnLaplacian();
+	afx_msg void OnUpdateLaplacian(CCmdUI* pCmdUI);
+	afx_msg void OnMidfilter();
+	afx_msg void OnUpdateMidfilter(CCmdUI* pCmdUI);
+	afx_msg void OnFft();
+	afx_msg void OnUpdateFft(CCmdUI* pCmdUI);
+	afx_msg void OnIfft();
+	afx_msg void OnUpdateIfft(CCmdUI* pCmdUI);
+	afx_msg void OnGradientSharpen();
+	afx_msg void OnUpdateGradientSharpen(CCmdUI* pCmdUI);
+	afx_msg void OnIdeallowpass();
+	afx_msg void OnUpdateIdeallowpass(CCmdUI* pCmdUI);
+	afx_msg void OnButterworthlowpass();
+	afx_msg void OnUpdateButterworthlowpass(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
